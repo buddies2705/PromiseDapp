@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promise Dapp</title>
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <!-- node_modules/web3/dist/web3.min.js -->
+</head>
+<body>
+    <div>
+    <h1>Promise Dapp</h1>
+
+<label >Address of Party1</label>
+ <input id="party1" type="text">
+<br>
+ <label>Address of Party2</label>
+ <input id="party2" type="text">
+<br>
+ <label >Promise to be stored</label>
+ <input id="promise" type="text">
+ <br>
+ <button id="button1">Store Promise</button>
+<br>
+<br>
+ <label >Enter your ID</label>
+ <input id="showpromise" type="text">
+ <br>
+ <br>
+<button id="button2">Show Promise</button>
+<br>
+<h3 id="shownpromise"></h3>
+
+ 
+
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
+var account;
+web3.eth.getAccounts().then((f) => {
+ account = f[0];
+ console.log(account)
+})
+     
+
+
+ var contractABI=JSON.parse('Your ABI code')
+
+var Promise= new web3.eth.Contract(contractABI);
+Promise.options.address="Any address from Ganache"
+
+  
+$(document).ready(function () {
+
+$("#button1").click(function() {
+console.log($("#party1").val());
+console.log($("#party2").val());
+console.log($("#promise").val());
+  
+  Promise.methods.storePromises($("#party1").val(), $("#party2").val(),$("#promise").val()).send({from:account,gas:3000000}).then(result=>{
+   console.log(result)
+ });
+});
+
+$('#button2').click(function(){
+  
+
+  Promise.methods.displayPromise($("#showpromise").val().toString()).call().then(result=>{
+    console.error(result);
+  $("#shownpromise").html("The promise was "+result);
+   
+   
+ })
+})
+});
+</script>
+</body>
+</html>
